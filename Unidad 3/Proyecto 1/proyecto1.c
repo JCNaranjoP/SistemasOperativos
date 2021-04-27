@@ -53,7 +53,5 @@ int main(int argc, char *argv[]) {
             close(pfdHijo[0]);
             waitpid(pid_hijo, &status, 0);
     }
-    /* Esta línea será ejecutada por ambos procesos, pero en
-        en diferente contexto (el de cada proceso) */
     exit(EXIT_SUCCESS);
 }
