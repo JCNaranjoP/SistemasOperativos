@@ -10,6 +10,8 @@ int main(int argc, char *argv[]) {
     int pfdHijo[2];
     int MSGSIZE = 100;
     char buf[MSGSIZE];
+    pipe(pfdPadre);
+    pipe(pfdHijo);
     
     exit(EXIT_SUCCESS);
 }
