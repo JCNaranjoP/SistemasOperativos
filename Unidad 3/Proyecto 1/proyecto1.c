@@ -20,7 +20,18 @@ int main(int argc, char *argv[]) {
         case 0: /* Código ejecutado por el hijo */
             close(pfdPadre[1]);
             close(pfdHijo[0]);
-            
+            while (1)
+            {
+                /* read pipe */
+                read(pfdPadre[0], buf, MSGSIZE);
+                /* Transforma el mensaje a mayuscula */
+                for (int i = 0; buf[i] != '\0'; i++)
+                {
+		        buf[i] = toupper(buf[i]);
+	            }
+                /* write pipe */
+                write(pfdHijo[1], buf, MSGSIZE);
+            }
             close(pfdHijo[1]);
             close(pfdPadre[0]);
             break;
