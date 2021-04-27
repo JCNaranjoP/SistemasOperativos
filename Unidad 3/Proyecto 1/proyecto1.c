@@ -27,7 +27,17 @@ int main(int argc, char *argv[]) {
         default: /* Código ejecutado por el padre */
             close(pfdPadre[0]);
             close(pfdHijo[1]);
-            
+            while (1)
+            {
+                scanf("%[^\n]",&buf);
+                getc(stdin);
+                /* write pipe */
+                write(pfdPadre[1], buf, MSGSIZE);
+                /* read pipe */
+                read(pfdHijo[0], buf, MSGSIZE);
+                /* imprimimos el mensaje */
+                printf("%s\n",buf);
+            }
             close(pfdPadre[1]);
             close(pfdHijo[0]);
             waitpid(pid_hijo, &status, 0);
