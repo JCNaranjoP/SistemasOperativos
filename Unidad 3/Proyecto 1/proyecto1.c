@@ -18,10 +18,18 @@ int main(int argc, char *argv[]) {
             printf("Error al crear el proceso");
             return -1;
         case 0: /* Código ejecutado por el hijo */
+            close(pfdPadre[1]);
+            close(pfdHijo[0]);
             
+            close(pfdHijo[1]);
+            close(pfdPadre[0]);
             break;
         default: /* Código ejecutado por el padre */
+            close(pfdPadre[0]);
+            close(pfdHijo[1]);
             
+            close(pfdPadre[1]);
+            close(pfdHijo[0]);
             waitpid(pid_hijo, &status, 0);
     }
     /* Esta línea será ejecutada por ambos procesos, pero en
