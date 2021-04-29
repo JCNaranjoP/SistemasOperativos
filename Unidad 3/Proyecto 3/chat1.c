@@ -30,3 +30,15 @@ void init_control_mechanism() {
 		exit(EXIT_FAILURE);
 	}
 }
+
+void shutdown_control_mechanism() {
+	if (sem_close(semaphore) < 0) {
+		perror("Closing the semaphore failed: ");
+		exit(EXIT_FAILURE);
+	}
+
+	if (sem_unlink("sem0") < 0) {
+		perror("Unlinking failed: ");
+		exit(EXIT_FAILURE);
+	}
+}
