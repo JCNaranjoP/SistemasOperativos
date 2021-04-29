@@ -81,3 +81,34 @@ void shutdown_shared_resource() {
 }
 
 int main(int argc, char **argv) {
+    
+
+	init_control_mechanism();
+	sem_post(semaphore1);
+	sem_wait(semaphore);
+	init_shared_resource();
+
+	if (ftruncate(shared_fd, SH_SIZE * sizeof(char)) < 0) {
+		perror("Truncation failed: ");
+		exit(EXIT_FAILURE);
+	}
+	void* map = mmap(NULL, SH_SIZE, PROT_WRITE, MAP_SHARED, shared_fd, 0);
+	if (map == MAP_FAILED) {
+		perror("Mapping failed: ");
+		exit(EXIT_FAILURE);
+	}
+	char* mem = (char*)map;
+
+
+	printf("Chat con el usuario 1\n");
+
+	pthread_t hilo1;
+	pthread_t hilo2;
+
+	pthread_create(&hilo1,NULL,(void*)lectura,(void*)mem);
+	pthread_create(&hilo2,NULL,(void*)escritura,(void*)mem);
+	pthread_join(hilo1,NULL);
+	pthread_join(hilo2,NULL);
+
+	exit(EXIT_SUCCESS);
+}
