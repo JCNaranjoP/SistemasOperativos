@@ -91,7 +91,7 @@ void processHiloRead(){
    }
    printf("Chat:\n");
    
-   for(;;) { 
+   while(1) { 
       if (msgrcv(msqid, &buf, sizeof(buf.mtext), 0, 0) == -1) {
          perror("msgrcv");
          exit(1);
