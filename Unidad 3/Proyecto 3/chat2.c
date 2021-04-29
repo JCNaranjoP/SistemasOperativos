@@ -13,19 +13,18 @@
 #define SH_SIZE 16
 
 int shared_fd = -1;
-char mem[20];
 int32_t *counter = NULL;
 sem_t *semaphore = NULL;
 sem_t *semaphore1 = NULL;
 
 void init_control_mechanism() {
-	semaphore = sem_open("sem0", O_CREAT, 0666, 0);
+	semaphore = sem_open("sem0", 1);
 	if (semaphore == SEM_FAILED) {
 		perror("Opening the semaphore failed: ");
 		exit(EXIT_FAILURE);
 	}
-	semaphore1 = sem_open("sem1", O_CREAT, 0666, 0);
-	if (semaphore == SEM_FAILED) {
+	semaphore1 = sem_open("sem1", 1);
+	if (semaphore1 == SEM_FAILED) {
 		perror("Opening the semaphore failed: ");
 		exit(EXIT_FAILURE);
 	}
@@ -43,45 +42,47 @@ void shutdown_control_mechanism() {
 	}
 }
 
-void lectura(char *mem) {
-	while (1) {
-		sem_wait(semaphore1);
+void lectura(char *mem){
+	while(1){
+		sem_wait(semaphore);
 		if(!strcmp(mem,"exit")) {
 			printf("Proceso hermano cerrado\n");
 			break;
 		}
-		printf("Usuario 2: %s \n",mem);
+		printf("User 1: %s\n",mem);
+
 	}
 }
 
-void escritura(char *mem) {
-	while (1) {
+void escritura(char *mem){
+	while(1){
 		char a[20];
 		scanf("%[^\n]", a);
 		getchar();
 		strcpy(mem,a);
-		sem_post(semaphore);
+		sem_post(semaphore1);
 		if(!strcmp(mem,"exit")) break;
 	}
 }
 
+
 void init_shared_resource() {
-	shared_fd = shm_open("shm0", O_CREAT | O_RDWR, 0777);
-	if (shared_fd < 0) {
-		perror("Failed to create shared memory: ");
-		exit(EXIT_FAILURE);
-	}
+    shared_fd = shm_open("shm0", O_RDWR, 0777);
+    if (shared_fd < 0) {
+        perror("Failed to create shared memory: ");
+        exit(EXIT_FAILURE);
+    }
 }
 
 void shutdown_shared_resource() {
-	if (shm_unlink("/shm0") < 0) {
-		perror("Unlinking shared memory failed: ");
-		exit(EXIT_FAILURE);
-	}
+    if (shm_unlink("/shm0") < 0) {
+        perror("Unlinking shared memory failed: ");
+        exit(EXIT_FAILURE);
+    }
 }
 
 int main(int argc, char **argv) {
-    
+
 
 	init_control_mechanism();
 	sem_post(semaphore1);
