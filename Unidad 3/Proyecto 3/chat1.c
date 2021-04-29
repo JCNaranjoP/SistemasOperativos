@@ -108,8 +108,6 @@ int main(int argc, char **argv) {
 	pthread_join(hilo1, NULL);
 	pthread_join(hilo2, NULL);
 
-
-
 	shutdown_control_mechanism();
 
 	exit(EXIT_SUCCESS);
