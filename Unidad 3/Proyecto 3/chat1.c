@@ -64,3 +64,18 @@ void escritura(char *mem) {
 		if(!strcmp(mem,"exit")) break;
 	}
 }
+
+void init_shared_resource() {
+	shared_fd = shm_open("shm0", O_CREAT | O_RDWR, 0777);
+	if (shared_fd < 0) {
+		perror("Failed to create shared memory: ");
+		exit(EXIT_FAILURE);
+	}
+}
+
+void shutdown_shared_resource() {
+	if (shm_unlink("/shm0") < 0) {
+		perror("Unlinking shared memory failed: ");
+		exit(EXIT_FAILURE);
+	}
+}
