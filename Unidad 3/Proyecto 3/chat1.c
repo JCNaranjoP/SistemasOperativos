@@ -42,3 +42,25 @@ void shutdown_control_mechanism() {
 		exit(EXIT_FAILURE);
 	}
 }
+
+void lectura(char *mem) {
+	while (1) {
+		sem_wait(semaphore1);
+		if(!strcmp(mem,"exit")) {
+			printf("Proceso hermano cerrado\n");
+			break;
+		}
+		printf("Usuario 2: %s \n",mem);
+	}
+}
+
+void escritura(char *mem) {
+	while (1) {
+		char a[20];
+		scanf("%[^\n]", a);
+		getchar();
+		strcpy(mem,a);
+		sem_post(semaphore);
+		if(!strcmp(mem,"exit")) break;
+	}
+}
