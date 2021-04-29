@@ -65,7 +65,6 @@ void escritura(char *mem){
 	}
 }
 
-
 void init_shared_resource() {
     shared_fd = shm_open("shm0", O_RDWR, 0777);
     if (shared_fd < 0) {
